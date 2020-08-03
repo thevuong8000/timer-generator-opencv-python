@@ -2,6 +2,7 @@ import numpy as np
 import os
 import cv2
 import time
+import sys
 
 '''
     File name: timer_generator.py
@@ -89,6 +90,13 @@ def get_file_name(period: str):
         filename = filename[0 : len(filename) - 1]
     return filename
 
+def get_workload_done(done):
+    loading_length = 50
+    rem = 100 - done
+    done = int(done * loading_length)
+    res = '█' * done + '.' * (loading_length - done)
+    return '|' + res + '|';
+
 def create_countdown_video(period, fps, resolution):
     filename = 'videos/' + get_file_name(period) + '.avi'
     width, height = get_dims(resolution)
@@ -99,16 +107,19 @@ def create_countdown_video(period, fps, resolution):
     # total time and remain time to countdown
     total_time = get_total_time_in_second(period)
     remain_time = total_time
+    print('Generating timer video:')
     while remain_time >= 0:
 
         # work processed
         work = (total_time - remain_time) / total_time
-        if work == 0.75:
-            print('75%', 'done')
-        elif work == 0.5:
-            print('50%', 'done')
-        elif work == 0.25:
-            print('25%', 'done')
+        # if work == 0.75:
+        #     print('75%', 'done')
+        # elif work == 0.5:
+        #     print('50%', 'done')
+        # elif work == 0.25:
+        #     print('25%', 'done')
+        sys.stdout.write('\r    Generating: ' + get_workload_done(work) + ' doing sth!')
+        sys.stdout.flush()
         
         # image to write
         img = get_img(time_to_string(remain_time), width, height)
@@ -118,7 +129,7 @@ def create_countdown_video(period, fps, resolution):
             out.write(img)
         remain_time -= 1
 
-    print('Hurray, 100%', 'done!!!')
+    print('\nHurray, 100%', 'done!!!')
     out.release()
     cv2.destroyAllWindows()
 
@@ -155,6 +166,6 @@ if __name__ == "__main__":
         promt = "Your input is invalid. Please type again!!! "
     startTime = time.time()
     create_countdown_video(period, fps, resolution)
-    print("Processing in:", time.time() - startTime, 'seconds')
+    print(f"Process {resolution} - {get_file_name(period)} video with {fps} fps in:", time.time() - startTime, 'seconds')
 
 
