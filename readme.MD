@@ -6,7 +6,7 @@ install cv2: `pip install opencv-python`
 ### Usage
 1. Make some changes in timer_generator.py
 2. Run in terminal: `python timer_generator.py`
-3. There're some available timer in *videos* folder
+3. There're some available timer in ***videos*** folder
 
 ### Time Complexity(Cost/Actual Time)
 **1.5 seconds/1 minute** for **480p video + 24 fps**
